@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -23,7 +25,6 @@ class _StarEffectState extends State<StarEffect>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     animControlStar = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 2000));
@@ -48,7 +49,7 @@ class _StarEffectState extends State<StarEffect>
     // });
 
     // animate(0);
-    WidgetsBinding.instance?.addPostFrameCallback((_) => generateStars());
+    WidgetsBinding.instance.addPostFrameCallback((_) => generateStars());
   }
 
   @override
@@ -116,7 +117,6 @@ class _StarEffectState extends State<StarEffect>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     starsNotifier.dispose();
     animControlStar.dispose();
     super.dispose();

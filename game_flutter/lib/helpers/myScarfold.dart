@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, library_prefixes
+
 import 'package:flutter/material.dart';
 import 'dart:math' as Math;
 
@@ -16,8 +18,9 @@ class MyScaffold extends StatelessWidget {
     double resizeScale = (min > 800 ? 1 : min / 800 * 1);
     var height = MediaQuery.of(context).viewPadding.top;
     return Scaffold(
-      drawer: Drawer(),
+      drawer: const Drawer(),
       body: SafeArea(
+        top: false,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -46,7 +49,6 @@ class MyScaffold extends StatelessWidget {
               )
           ],
         ),
-        top: false,
       ),
     );
   }

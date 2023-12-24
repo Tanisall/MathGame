@@ -1,24 +1,23 @@
+// ignore_for_file: library_prefixes, no_leading_underscores_for_local_identifiers, unused_local_variable, avoid_unnecessary_containers, prefer_const_constructors, file_names
+
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:animate_do/animate_do.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:game_flutter/controller/database/firebase_db.dart';
 import 'package:game_flutter/singletons/sound_manager.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:game_flutter/generalNotifier.dart';
 import 'package:game_flutter/helpers/fontHelper.dart';
 import 'package:game_flutter/helpers/gameWidget.dart';
 import 'package:game_flutter/helpers/model.dart';
-import 'package:game_flutter/helpers/myScarfold.dart';
 import 'package:game_flutter/helpers/starEffect.dart';
 import 'dart:math' as Math;
-
-import 'package:game_flutter/pages/game.dart';
 import 'package:game_flutter/singletons/data_manager.dart';
 
 class GameLayout extends StatefulWidget {
@@ -36,7 +35,9 @@ typedef MyCustomBuilder = Widget Function(
 
 class _GameLayoutState extends State<GameLayout>
     with SingleTickerProviderStateMixin {
-  AudioPlayer _audioPlayer = AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  final DatabaseController databaseController = Get.put(DatabaseController());
 
   late GeneralNotifier generalNotifier;
   CarouselController carouselController = CarouselController();
@@ -70,7 +71,6 @@ class _GameLayoutState extends State<GameLayout>
     // );
     initiateAnimations();
 
-    // TODO: implement initState
     super.initState();
   }
 
@@ -138,7 +138,6 @@ class _GameLayoutState extends State<GameLayout>
     min = Math.min(size.width - 50, size.height - 50);
     resizeScale = (min > (900 * 0.8) ? 1 : min / (900 * 0.8));
     axis = size.aspectRatio > 1.45 ? Axis.horizontal : Axis.vertical;
-    Axis axisChild1 = axis == Axis.horizontal ? Axis.vertical : Axis.horizontal;
 
     AppBar appBar = appbar();
 
@@ -147,17 +146,6 @@ class _GameLayoutState extends State<GameLayout>
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // drawer: Drawer(),
-      // InkWell(
-      //             onTap: () => generalNotifier.setMenuIndex(mainMenu.index),
-      //             child: FontHelper(
-      //               "${mainMenu.text}",
-      //               color: context.read<GeneralNotifier>().getMenuIndex ==
-      //                       mainMenu.index
-      //                   ? Colors.red
-      //                   : Colors.white,
-      //             ),
-      //           )
       appBar: appBar,
       body: StarEffect(
         child: Column(
@@ -190,7 +178,7 @@ class _GameLayoutState extends State<GameLayout>
                       sizeMaxGame.longestSide - (5 * resizeScale) * 2));
 
                   return Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     constraints: BoxConstraints.tight(constraints.biggest),
                     margin: EdgeInsets.only(top: heightAppbar),
                     child: getMainMenuNotifier(
@@ -203,6 +191,7 @@ class _GameLayoutState extends State<GameLayout>
                           Expanded(
                             child: getInfoGameNotifier(builder:
                                 (context, childInfo, InfoGame infoGame) {
+                              databaseController.move.value = infoGame.move;
                               return Flex(
                                 mainAxisAlignment: axis == Axis.horizontal
                                     ? MainAxisAlignment.center
@@ -278,8 +267,6 @@ class _GameLayoutState extends State<GameLayout>
                                   builder: (context, int value, child) {
                                     String text = "";
 
-                                    print("counter $value");
-
                                     if (value == 4) {
                                       text = "Siap!";
                                     } else if (value > 0) {
@@ -315,13 +302,6 @@ class _GameLayoutState extends State<GameLayout>
                                     );
                                   },
                                 ),
-                                // getPuzzleIndexNotifier(
-                                //   child: gameWidget,
-                                //   builder: (context, child, index) {
-                                //     print("index $index");
-                                //     return child!;
-                                //   },
-                                // ),
                                 Align(
                                   alignment: Alignment.topCenter,
                                   child: ConfettiWidget(
@@ -346,17 +326,11 @@ class _GameLayoutState extends State<GameLayout>
                           ),
                           Flexible(
                             child: Container(
-                              // constraints: BoxConstraints.tight(minSizeSide),
-                              // color: Colors.blue,
                               child: Flex(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 direction: axis,
                                 children: [
-                                  // FontHelper(
-                                  //   "${generalNotifier.getMenuIndex} ${constraints.biggest.aspectRatio}",
-                                  //   color: Colors.white,
-                                  // ),
                                   getMainMenuNotifier(
                                       builder: (context, menuChild, menuIndex) {
                                     return AnimatedScale(
@@ -408,17 +382,6 @@ class _GameLayoutState extends State<GameLayout>
                               ),
                             ),
                           ),
-                          // getPuzzleIndexNotifier(
-                          //   builder: (context, child, index) {
-                          //     return Slider(
-                          //       value: index,
-                          //       min: 0,
-                          //       onChanged: (value) => updatePuzzleIndex(value.toInt()),
-                          //       max: (DataManager.puzzleSources!.length - 1).toDouble(),
-                          //       // onChangeEnd: (value) => ,
-                          //     );
-                          //   },
-                          // )
                         ],
                       );
                     }),
@@ -493,8 +456,8 @@ class _GameLayoutState extends State<GameLayout>
                           );
                         }), builder: (context, menuChild, menuIndex) {
                           return Offstage(
-                            child: menuChild,
                             offstage: menuIndex == 0,
+                            child: menuChild,
                           );
                         })
                       ],
@@ -518,11 +481,11 @@ class _GameLayoutState extends State<GameLayout>
       ) builder,
       Widget? child}) {
     return ValueListenableBuilder(
-      child: child,
       builder: (context, int mainMenus, childMenu) {
         return builder.call(context, childMenu, mainMenus);
       },
       valueListenable: generalNotifier.mainMenuIndex,
+      child: child,
     );
   }
 
@@ -534,11 +497,11 @@ class _GameLayoutState extends State<GameLayout>
       ) builder,
       Widget? child}) {
     return ValueListenableBuilder(
-      child: child,
       builder: (context, int indexMenu, childMenu) {
         return builder.call(context, childMenu, indexMenu);
       },
       valueListenable: generalNotifier.choicePuzzleIndex,
+      child: child,
     );
   }
 
@@ -550,11 +513,11 @@ class _GameLayoutState extends State<GameLayout>
       ) builder,
       Widget? child}) {
     return ValueListenableBuilder(
-      child: child,
       builder: (context, ActionControl actionControl, childMenu) {
         return builder.call(context, childMenu, actionControl);
       },
       valueListenable: generalNotifier.actionNotifier,
+      child: child,
     );
   }
 
@@ -566,11 +529,11 @@ class _GameLayoutState extends State<GameLayout>
       ) builder,
       Widget? child}) {
     return ValueListenableBuilder(
-      child: child,
       builder: (context, InfoGame value, child) {
         return builder.call(context, child, value);
       },
       valueListenable: generalNotifier.infoGameNotifier,
+      child: child,
     );
   }
 
@@ -582,11 +545,11 @@ class _GameLayoutState extends State<GameLayout>
       ) builder,
       Widget? child}) {
     return ValueListenableBuilder(
-      child: child,
       builder: (context, int value, child) {
         return builder.call(context, child, value);
       },
       valueListenable: generalNotifier.totalSplitNotifier,
+      child: child,
     );
   }
 
@@ -597,69 +560,11 @@ class _GameLayoutState extends State<GameLayout>
       shadowColor: Colors.transparent,
       actions: [
         getMainMenuNotifier(builder: (context, child, value) {
-          return Row(
-              // children: generalNotifier.mainMenus.map((mainMenu) {
-              //   return InkWell(
-              //     onTap: () => updateMenuIndex(mainMenu.index),
-              //     child: FontHelper(
-              //       "${mainMenu.text}",
-              //       color: value == mainMenu.index ? Colors.red : Colors.white,
-              //     ),
-              //   );
-              // }).toList(),
-              );
+          return const Row();
         })
       ],
     );
   }
-
-  // updateMenuIndex(int index) {
-  //   generalNotifier.setCounterNotifier(-1);
-  //   generalNotifier.setInfoGameNotifier(
-  //       title: "Puzzle Challenge!", move: 0, tiles: 0);
-  //   animateCtrlCounter.reset();
-  //   generalNotifier.setMenuIndex(index);
-  //   if (index == 0) {
-  //     globalKey1.currentState?.randomPuzzle();
-  //     globalKey1.currentState?.initiateGame(false);
-  //   } else if (index == 1) {
-  //     if (DataManager.puzzleSources!
-  //             .indexOf(globalKey2.currentState!.widget.puzzleSource) !=
-  //         generalNotifier.getChoicePuzzleIndex()) {
-  //       globalKey2.currentState?.updatePuzzleSource(
-  //           DataManager.puzzleSources![generalNotifier.getChoicePuzzleIndex()]);
-  //       globalKey2.currentState?.initiateGame();
-  //     } else
-  //       globalKey2.currentState?.initiateGame(false);
-  //   } else if (index == 2) {
-  //     if (DataManager.puzzleSources!
-  //             .indexOf(globalKey3.currentState!.widget.puzzleSource) !=
-  //         generalNotifier.getChoicePuzzleIndex()) {
-  //       globalKey3.currentState?.updatePuzzleSource(
-  //           DataManager.puzzleSources![generalNotifier.getChoicePuzzleIndex()]);
-  //       globalKey3.currentState?.initiateGame();
-  //     } else
-  //       globalKey3.currentState?.initiateGame(false);
-  //   }
-  //   // controller.animateToPage(
-  //   //   index,
-  //   //   duration: const Duration(milliseconds: 300),
-  //   //   curve: Curves.ease,
-  //   // );
-  // }
-
-  // updatePuzzleIndex(int value) {
-  //   if (value != generalNotifier.getChoicePuzzleIndex()) {
-  //     generalNotifier.setChoicePuzzleIndex(value);
-
-  //     if (generalNotifier.getMenuIndex == 1)
-  //       globalKey2.currentState
-  //           ?.updatePuzzleSource(DataManager.puzzleSources![value]);
-  //     else if (generalNotifier.getMenuIndex == 2)
-  //       globalKey3.currentState
-  //           ?.updatePuzzleSource(DataManager.puzzleSources![value]);
-  //   }
-  // }
 
   void setGameWidgets(sizeMaxGame) {
     if (gameWidget1 != null) {
@@ -670,20 +575,6 @@ class _GameLayoutState extends State<GameLayout>
         totalSplit: generalNotifier.getTotalSplit,
       );
     }
-    // if (gameWidget2 != null) {
-    //   globalKey2.currentState!.setUpdate(
-    //     size: sizeMaxGame,
-    //     padding: 4 * resizeScale,
-    //     paddingOuter: resizeScale * 20,
-    //   );
-    // }
-    // if (gameWidget3 != null) {
-    //   globalKey3.currentState!.setUpdate(
-    //     size: sizeMaxGame,
-    //     padding: 4 * resizeScale,
-    //     paddingOuter: resizeScale * 20,
-    //   );
-    // }
 
     gameWidget1 ??= GameWidget(
       DataManager.puzzleSources![generalNotifier.choicePuzzleIndex.value],
@@ -745,8 +636,9 @@ class _GameLayoutState extends State<GameLayout>
   }
 
   void setActionCtrl() {
-    if (generalNotifier.getMenuIndex == 2)
+    if (generalNotifier.getMenuIndex == 2) {
       globalKey3.currentState?.changeAction(generalNotifier.getActionCtrl);
+    }
   }
 
   onTapGridBtn() {
@@ -774,9 +666,12 @@ class _GameLayoutState extends State<GameLayout>
                     mainAxisSpacing: 2,
                   ),
                   shrinkWrap: true,
-                  physics: ScrollPhysics(),
+                  physics: const ScrollPhysics(),
                   itemCount: 4,
                   itemBuilder: (buildContext, index) {
+                    databaseController.pola.value =
+                        "${(index + 3)}x${(index + 3)}";
+
                     return Material(
                       color: Colors.transparent,
                       child: InkWell(
@@ -807,7 +702,7 @@ class _GameLayoutState extends State<GameLayout>
                           }
                         },
                         child: AnimatedScale(
-                          duration: Duration(milliseconds: 500),
+                          duration: const Duration(milliseconds: 500),
                           scale: value == (index + 3) ? .9 : 0.7,
                           child: Container(
                             margin: EdgeInsets.all(20 * resizeScale),
@@ -930,6 +825,8 @@ class _GameLayoutState extends State<GameLayout>
 
   winFeedback([int type = 1]) {
     generalNotifier.setInfoGameNotifier(title: "Menang!");
+    databaseController.storeData(
+        databaseController.move.value, databaseController.pola.value);
     _controllerCenter.play();
     Timer timer = Timer(
       Duration(seconds: 3),

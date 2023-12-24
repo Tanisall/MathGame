@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_unnecessary_containers, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, unused_field, non_constant_identifier_names, library_prefixes
+
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flutter/helpers/fontHelper.dart';
 import 'package:game_flutter/helpers/gameWidget.dart';
@@ -58,7 +59,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     totalSplitNotifier.dispose();
     sourceIndexNotifier.dispose();
 
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -68,7 +68,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     initiateAnimations();
 
     // WidgetsBinding.instance?.addPostFrameCallback((_) => initiateProcess());
-    // TODO: implement initState
     super.initState();
   }
 
@@ -102,7 +101,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       body: StarEffect(
         child: Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: ValueListenableBuilder(
               valueListenable: completeNotifier,
               builder: (context, bool complete, child) {
@@ -130,13 +129,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                         Math.min(constraints.biggest.width,
                                             constraints.biggest.height),
                                         (500));
-
-                                    print(
-                                        "stat ${constraints.biggest} ${minGameWidthHeight}");
-
                                     return Container(
                                       clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         // color: Colors.red,
                                         shape: BoxShape.circle,
                                       ),
@@ -146,38 +141,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                       child: Stack(
                                         fit: StackFit.passthrough,
                                         children: [
-                                          // Positioned(
-                                          //   left: 0,
-                                          //   bottom: 0,
-                                          //   right: 0,
-                                          //   top: 0,
-                                          //   child: listenerValueTotalSplit(
-                                          //     builder: (context, child, value) {
-                                          //       return SleekCircularSlider(
-                                          //         initialValue: value,
-                                          //         appearance:
-                                          //             CircularSliderAppearance(
-                                          //           size: 60,
-                                          //         ),
-                                          //         min: 3,
-                                          //         max: 6,
-                                          //         onChangeEnd: (value) {
-                                          //           totalSplitNotifier.value =
-                                          //               value.toInt();
-                                          //           totalSplitNotifier
-                                          //               .notifyListeners();
-                                          //           key.currentState!
-                                          //               .updateTotalSplit(
-                                          //                   value.toInt());
-                                          //         },
-                                          //         onChange: (double value) {},
-                                          //       );
-                                          //     },
-                                          //   ),
-                                          // ),
                                           Container(
                                             clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
                                             ),
                                             margin:
@@ -189,8 +155,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                                                   minGameWidthHeight -
                                                       (0 * resizeScale) * 2),
                                               padding: 4 * resizeScale,
-                                              durationPieceMove:
-                                                  Duration(milliseconds: 300),
+                                              durationPieceMove: const Duration(
+                                                  milliseconds: 300),
                                               totalSplit:
                                                   totalSplitNotifier.value,
                                               counterCallback: (int counter) {
@@ -372,76 +338,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.center,
           direction: axis,
           children: [
-            // Flex(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   crossAxisAlignment: CrossAxisAlignment.center,
-            //   direction: axisChild,
-            //   children: [
-            //     ElevatedButton(
-            //         child: FontHelper("Test ${_puzzleSource.image!.width}",
-            //             tapCallback: () => key.currentState!.initiateGame()),
-            //         onPressed: () => {}),
-            //     listenerValueTotalSplit(
-            //       builder: (context, child, value) {
-            //         return DropdownButton<int>(
-            //             value: value,
-            //             items: List.generate(
-            //                 4,
-            //                 (index) => DropdownMenuItem(
-            //                       child: FontHelper(
-            //                         "${index + 3}",
-            //                         color: Colors.white,
-            //                       ),
-            //                       value: index + 3,
-            //                     )),
-            //             onChanged: (val) {
-            //               // print("val $val");
-            //               totalSplitNotifier.value = val!;
-            //               totalSplitNotifier.notifyListeners();
-            //               key.currentState!.updateTotalSplit(val);
-            //             });
-            //         // return Slider(
-            //         //   min: 3,
-            //         //   max: 6,
-            //         //   value: value.toDouble(),
-            //         //   onChangeStart: (a) => key.currentState!.initiateGame(),
-            //         //   onChangeEnd: (a) {
-            //         //     key.currentState!.updateTotalSplit(a.toInt());
-            //         //   },
-            //         //   onChanged: (val) {
-            //         //     // print("val $val");
-            //         //     totalSplitNotifier.value = val.toInt();
-            //         //     totalSplitNotifier.notifyListeners();
-            //         //   },
-            //         // );
-            //       },
-            //     ),
-            //     listenerValueIndexImage(
-            //       builder: (context, child, value) {
-            //         print("value $value");
-            //         return DropdownButton<int>(
-            //             value: value,
-            //             items: List.generate(
-            //               DataManager.puzzleSources!.length,
-            //               (index) => DropdownMenuItem(
-            //                 child: FontHelper(
-            //                   "${index + 1}",
-            //                   color: Colors.white,
-            //                 ),
-            //                 value: index + 1,
-            //               ),
-            //             ).toList(),
-            //             onChanged: (val) {
-            //               // print("val $val");
-            // sourceIndexNotifier.value = val!;
-            // sourceIndexNotifier.notifyListeners();
-            // changePuzzleSource();
-            // key.currentState!.updatePuzzleSource(_puzzleSource);
-            //             });
-            //       },
-            //     ),
-            //   ],
-            // ),
             Container(
               width: (axis == Axis.horizontal ? 150 : size.width / 3 * 2),
               height: (axis == Axis.horizontal ? size.height / 3 * 2 : 150),
@@ -489,6 +385,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
           children: [
             Flex(
               direction: axisChild1,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 listenerValueTotalSplit(
                   builder: (context, child, value) {
@@ -527,8 +425,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                   },
                 ),
               ],
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
             ),
           ],
         ),

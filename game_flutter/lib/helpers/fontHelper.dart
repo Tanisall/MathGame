@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, constant_identifier_names, file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 enum FontSize { Title, Subtitle, Content1, Content2 }
@@ -50,7 +52,7 @@ class FontHelper extends StatefulWidget {
     this.blurRadius = 0.7,
     this.sizeText,
     this.overflow = TextOverflow.visible,
-    this.maxLines = null,
+    this.maxLines,
     this.letterSpacing = 1,
     this.decoration,
     this.borderRadius,
@@ -67,7 +69,7 @@ class FontHelper extends StatefulWidget {
   }) : super(key: key) {
     // border ??= Border.;
     shadowColor ??= Colors.white24;
-    shadowOffset ??= Offset(0, 1);
+    shadowOffset ??= const Offset(0, 1);
     decoration ??= TextDecoration.none;
     strokeColorTouch ??= strokeColor;
     padding ??= const EdgeInsets.symmetric(horizontal: 10, vertical: 5);
@@ -79,116 +81,7 @@ class FontHelper extends StatefulWidget {
   static String? getFontEnum(FontClass fontClass) {
     if (fontClass.toString().split(".")[1] == "None") return null;
     return fontClass.toString().split(".")[1];
-
-    print(fontClass.toString().split(".")[1]);
-    if (fontClass == FontClass.Imaginary) return "Imaginary";
-    if (fontClass == FontClass.Quinngothic) return "Quinngothic";
   }
-
-  // static Widget text(
-  //   String text, {
-  //   TextAlign align = TextAlign.left,
-  //   Color color = Colors.black87,
-  //   FontClass fontFamily = FontClass.None,
-  //   FontWeight fontWeight = FontWeight.w500,
-  //   Color? shadowColor,
-  //   Color? bgColor,
-  //   EdgeInsets? padding,
-  //   Offset? shadowOffset,
-  //   double blurRadius = 0.7,
-  //   double? sizeText,
-  //   TextOverflow overflow = TextOverflow.visible,
-  //   int? maxLines = null,
-  //   double letterSpacing = 1,
-  //   TextDecoration? decoration,
-  //   BorderRadius? borderRadius,
-  //   Border? border,
-  //   FontSize fontSizeEnum = FontSize.Content2,
-  //   Color strokeColor = Colors.white,
-  //   bool showStroke = false,
-  //   double strokePercent = 0.2,
-  //   Color? strokeColorTouch,
-  // }) {
-  //   borderRadius ??= BorderRadius.circular(2);
-  //   border ??= Border.all(width: 1);
-  //   shadowColor ??= Colors.white24;
-  //   shadowOffset ??= Offset(0, 1);
-  //   // if (shadowOffset == null) shadowOffset = Offset(0.7, 1.5);
-  //   decoration ??= TextDecoration.none;
-  //   padding ??= const EdgeInsets.symmetric(horizontal: 10, vertical: 5);
-  //   strokeColorTouch ??= strokeColor;
-
-  //   Widget widgetText = Text(
-  //     text,
-  //     textAlign: align,
-  //     maxLines: maxLines,
-  //     overflow: overflow,
-  //     style: TextStyle(
-  //       fontSize: sizeText ?? getSizeBaseEnum(fontSizeEnum),
-  //       letterSpacing: letterSpacing,
-  //       color: color,
-  //       fontFamily: FontHelper.getFontEnum(fontFamily),
-  //       fontWeight: fontWeight,
-  //       decoration: decoration,
-  //       wordSpacing: -1,
-  //     ),
-  //   );
-
-  //   Widget widgetTextStroke = Text(
-  //     text,
-  //     textAlign: align,
-  //     maxLines: maxLines,
-  //     overflow: overflow,
-  //     style: TextStyle(
-  //         foreground: Paint()
-  //           ..color = strokeColor
-  //           ..strokeJoin = StrokeJoin.round
-  //           ..strokeCap = StrokeCap.round
-  //           ..style = PaintingStyle.stroke
-  //           ..strokeWidth =
-  //               strokePercent * (sizeText ?? getSizeBaseEnum(fontSizeEnum)),
-  //         fontSize: sizeText ?? getSizeBaseEnum(fontSizeEnum),
-  //         letterSpacing: letterSpacing,
-  //         // color: color,
-  //         fontFamily: FontHelper.getFontEnum(fontFamily),
-  //         fontWeight: fontWeight,
-  //         decoration: decoration,
-  //         wordSpacing: -1,
-  //         // decorationThickness: 20,
-  //         shadows: [
-  //           Shadow(
-  //             blurRadius: blurRadius,
-  //             color: shadowColor,
-  //             offset: shadowOffset,
-  //           )
-  //         ]),
-  //   );
-
-  //   Widget strokeWidget = Stack(
-  //     children: [
-  //       Offstage(
-  //         offstage: !showStroke,
-  //         child: widgetTextStroke,
-  //       ),
-  //       widgetText
-  //     ],
-  //   );
-
-  //   return Material(
-  //     color: Colors.transparent,
-  //     child: bgColor == null
-  //         ? strokeWidget
-  //         : Container(
-  //             decoration: BoxDecoration(
-  //               color: bgColor,
-  //               border: border,
-  //               borderRadius: borderRadius,
-  //             ),
-  //             padding: padding,
-  //             child: strokeWidget,
-  //           ),
-  //   );
-  // }
 
   static double getSizeBaseEnum(FontSize fontSizeEnum) {
     switch (fontSizeEnum) {

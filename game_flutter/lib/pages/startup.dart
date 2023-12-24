@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flutter/helpers/fontHelper.dart';
@@ -17,7 +19,6 @@ class _StartupPageState extends State<StartupPage> {
   @override
   void initState() {
     initiateProcess();
-    // TODO: implement initState
     super.initState();
   }
 

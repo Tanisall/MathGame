@@ -1,11 +1,11 @@
+// ignore_for_file: library_prefixes, must_be_immutable, camel_case_types, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+
 import 'dart:async';
 
-import 'package:animate_do/animate_do.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:game_flutter/generalNotifier.dart';
-import 'package:game_flutter/helpers/fontHelper.dart';
 import 'dart:math' as Math;
 
 import 'package:game_flutter/helpers/model.dart';
@@ -55,7 +55,7 @@ class GameWidgetState_ extends State<GameWidget> {
       ValueNotifier<GameStatus>(GameStatus.start);
   late GeneralNotifier generalNotifier;
 
-  AudioPlayer _audioPlayer = AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   List<dynamic>? images;
   Timer? timer;
@@ -80,7 +80,6 @@ class GameWidgetState_ extends State<GameWidget> {
     actionNotifier.dispose();
     gameStatusNotifier.dispose();
     _audioPlayer.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -88,14 +87,13 @@ class GameWidgetState_ extends State<GameWidget> {
   void initState() {
     generalNotifier = Provider.of<GeneralNotifier>(context, listen: false);
     print("widget ${widget.paddingOuter}");
-    // TODO: implement initState
+
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => initiateGame());
+    WidgetsBinding.instance.addPostFrameCallback((_) => initiateGame());
   }
 
   @override
   Widget build(BuildContext context) {
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
     size = widget.size;
     // size = Size(size.width, size.height);
 
@@ -296,11 +294,12 @@ class GameWidgetState_ extends State<GameWidget> {
       moveLinePuzzle(axis, emptyBox.index, randomKey, totalKey);
     }
 
-    if (widget.hard == 2)
+    if (widget.hard == 2) {
       puzzlesNotifier.value = puzzlesNotifier.value.map((e) {
         e.randomRotate();
         return e;
       }).toList();
+    }
 
     puzzlesNotifier.notifyListeners();
 
@@ -341,7 +340,6 @@ class GameWidgetState_ extends State<GameWidget> {
 
     // check current puzzle solve or not
     if (success()) {
-      print("Game Status :${gameStatusNotifier.value}");
       await Future.delayed(Duration(
               milliseconds: widget.durationPieceMove!.inMilliseconds + 0))
           .then((value) async {
