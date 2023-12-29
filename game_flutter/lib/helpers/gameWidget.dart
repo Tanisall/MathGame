@@ -310,6 +310,7 @@ class GameWidgetState_ extends State<GameWidget> {
         0);
   }
 
+// buat move kotak
   touchBox(int key, ActionControl action) async {
     // disini sound
     if (action == ActionControl.move) {

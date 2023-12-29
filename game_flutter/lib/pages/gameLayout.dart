@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:game_flutter/controller/database/firebase_db.dart';
@@ -47,6 +48,7 @@ class _GameLayoutState extends State<GameLayout>
   late double resizeScale;
   late Axis axis;
   final PageController controller = PageController();
+  //memakai game widget1
   GameWidget? gameWidget1;
   GameWidget? gameWidget2;
   GameWidget? gameWidget3;
@@ -122,16 +124,16 @@ class _GameLayoutState extends State<GameLayout>
   @override
   Widget build(BuildContext context) {
     // Metode untuk memainkan file audio
-    Future<void> _playAudio() async {
-      await _audioPlayer.play(AssetSource('sounds/xylophone-20462.mp3'),
-          volume: 1);
-      await _audioPlayer.setVolume(1);
-      _audioPlayer.onPlayerComplete.listen((event) {
-        // Audio selesai, mulai lagi dari awal
-        _audioPlayer.seek(Duration.zero);
-        _audioPlayer.play(AssetSource('sounds/xylophone-20462.mp3'), volume: 1);
-      });
-    }
+    // Future<void> _playAudio() async {
+    //   await _audioPlayer.play(AssetSource('sounds/xylophone-20462.mp3'),
+    //       volume: 1);
+    //   await _audioPlayer.setVolume(1);
+    //   _audioPlayer.onPlayerComplete.listen((event) {
+    //     // Audio selesai, mulai lagi dari awal
+    //     _audioPlayer.seek(Duration.zero);
+    //     _audioPlayer.play(AssetSource('sounds/xylophone-20462.mp3'), volume: 1);
+    //   });
+    // }
 
     size = MediaQuery.of(context).size;
 
@@ -142,8 +144,9 @@ class _GameLayoutState extends State<GameLayout>
     AppBar appBar = appbar();
 
     SoundManager.moveTile();
-    _playAudio();
+    // _playAudio();
 
+// Mulai Game
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: appBar,
@@ -251,6 +254,7 @@ class _GameLayoutState extends State<GameLayout>
                               children: [
                                 Offstage(
                                   offstage: menuIndex != 0,
+                                  // Mulai
                                   child: gameWidget1,
                                 ),
                                 Offstage(
@@ -657,6 +661,7 @@ class _GameLayoutState extends State<GameLayout>
                 Size.square(Math.min(sizeModal.shortestSide, 550))),
             child: getTotalSplitNotifier(
               builder: (context, child, value) {
+                // untuk kotak kotak
                 return GridView.builder(
                   scrollDirection: Axis.horizontal,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -680,13 +685,14 @@ class _GameLayoutState extends State<GameLayout>
 
                           generalNotifier.setCounterNotifier(-1);
                           generalNotifier.setInfoGameNotifier(
-                              title: "Puzzle Challenge!", move: 0, tiles: 0);
+                              title: "Math Puzzle!", move: 0, tiles: 0);
                           animateCtrlCounter.reset();
 
                           globalKey1.currentState!.updateTotalSplit(index + 3);
                           globalKey2.currentState!.updateTotalSplit(index + 3);
                           globalKey3.currentState!.updateTotalSplit(index + 3);
                           if (generalNotifier.getMenuIndex == 0) {
+                            // Pola 3x3
                             globalKey1.currentState?.initiateGame(false);
                             globalKey1.currentState?.randomPuzzle();
                           } else if (generalNotifier.getMenuIndex == 1) {
@@ -834,7 +840,7 @@ class _GameLayoutState extends State<GameLayout>
         if (type == 0) {
           generalNotifier.setCounterNotifier(-1);
           generalNotifier.setInfoGameNotifier(
-              title: "Indoneisa Puzzle!", move: 0, tiles: 0);
+              title: "Math Puzzle!", move: 0, tiles: 0);
           animateCtrlCounter.reset();
           globalKey1.currentState!.randomPuzzle();
           globalKey1.currentState?.initiateGame(false);

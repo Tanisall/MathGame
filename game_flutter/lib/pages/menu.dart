@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flutter/controller/auth/firebase_auth.dart';
 import 'package:game_flutter/controller/database/firebase_db.dart';
@@ -10,11 +11,28 @@ import 'package:game_flutter/pages/gameLayout.dart';
 import 'package:get/get.dart';
 import 'dart:math' as Math;
 
-class MainMenuPage extends StatelessWidget {
+class MainMenuPage extends StatefulWidget {
+  MainMenuPage({Key? key}) : super(key: key);
+
+  @override
+  _MainMenuPageState createState() => _MainMenuPageState();
+}
+
+class _MainMenuPageState extends State<MainMenuPage> {
   final DatabaseController databaseController = Get.put(DatabaseController());
   final AuthController authController = Get.put(AuthController());
 
-  MainMenuPage({super.key});
+  @override
+  void dispose() {
+    // Matikan audio saat widget dihapus
+    FlameAudio.bgm.stop();
+    super.dispose();
+  }
+
+  Future<void> _playAudio() async {
+    // FlameAudio.bgm.initialize();
+    await FlameAudio.bgm.play('Arcade.mp3');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +43,7 @@ class MainMenuPage extends StatelessWidget {
     double min = Math.min(size.width, size.height);
     double resizeScale = (min > 800 ? 1 : min / 800 * 1);
     // GameLayout gameLayout = GameLayout();
+
     return Scaffold(
       backgroundColor: Colors.blueAccent,
       body: Center(
@@ -97,6 +116,7 @@ class MainMenuPage extends StatelessWidget {
             style: ElevatedButton.styleFrom(
                 minimumSize: Size(150, 50), backgroundColor: Colors.white),
             onPressed: () {
+              _playAudio();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => GameLayout()),

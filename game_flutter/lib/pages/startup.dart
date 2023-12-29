@@ -84,7 +84,7 @@ class _StartupPageState extends State<StartupPage> {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 15),
                                 child: FontHelper(
-                                  "Indonesia Puzzle",
+                                  "Math Puzzle",
                                   color: Color.fromARGB(255, 247, 119, 0),
                                   sizeText: 50 * resizeScale,
                                   fontFamily: FontClass.Random,
