@@ -1,7 +1,6 @@
 // ignore_for_file: library_prefixes, no_leading_underscores_for_local_identifiers, unused_local_variable, avoid_unnecessary_containers, prefer_const_constructors, file_names
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -9,7 +8,8 @@ import 'package:confetti/confetti.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:game_flutter/controller/database/firebase_db.dart';
+import 'package:game_flutter/controller/auth/appwrite_auth.dart';
+import 'package:game_flutter/controller/database/appwrite_db.dart';
 import 'package:game_flutter/singletons/sound_manager.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -37,8 +37,8 @@ typedef MyCustomBuilder = Widget Function(
 class _GameLayoutState extends State<GameLayout>
     with SingleTickerProviderStateMixin {
   final AudioPlayer _audioPlayer = AudioPlayer();
-
   final DatabaseController databaseController = Get.put(DatabaseController());
+  final AuthController authController = Get.put(AuthController());
 
   late GeneralNotifier generalNotifier;
   CarouselController carouselController = CarouselController();
@@ -195,6 +195,10 @@ class _GameLayoutState extends State<GameLayout>
                             child: getInfoGameNotifier(builder:
                                 (context, childInfo, InfoGame infoGame) {
                               databaseController.move.value = infoGame.move;
+                              if (infoGame.move == 60) {
+                                loseFeedback(0);
+                              }
+
                               return Flex(
                                 mainAxisAlignment: axis == Axis.horizontal
                                     ? MainAxisAlignment.center
@@ -232,7 +236,7 @@ class _GameLayoutState extends State<GameLayout>
                                   ),
                                   Flexible(
                                     child: FontHelper(
-                                      "Tiles   ${infoGame.tiles}",
+                                      "Max Move \t\t60",
                                       color: Colors.orange,
                                       showStroke: true,
                                       strokePercent: 0.4,
@@ -674,9 +678,6 @@ class _GameLayoutState extends State<GameLayout>
                   physics: const ScrollPhysics(),
                   itemCount: 4,
                   itemBuilder: (buildContext, index) {
-                    databaseController.pola.value =
-                        "${(index + 3)}x${(index + 3)}";
-
                     return Material(
                       color: Colors.transparent,
                       child: InkWell(
@@ -692,6 +693,9 @@ class _GameLayoutState extends State<GameLayout>
                           globalKey2.currentState!.updateTotalSplit(index + 3);
                           globalKey3.currentState!.updateTotalSplit(index + 3);
                           if (generalNotifier.getMenuIndex == 0) {
+                            databaseController.pola.value =
+                                "${(index + 3)}x${(index + 3)}";
+
                             // Pola 3x3
                             globalKey1.currentState?.initiateGame(false);
                             globalKey1.currentState?.randomPuzzle();
@@ -831,9 +835,31 @@ class _GameLayoutState extends State<GameLayout>
 
   winFeedback([int type = 1]) {
     generalNotifier.setInfoGameNotifier(title: "Menang!");
-    databaseController.storeData(
-        databaseController.move.value, databaseController.pola.value);
+    databaseController.checkDataScore(authController.uid.value);
     _controllerCenter.play();
+    FlameAudio.play('win.wav');
+    FlameAudio.bgm.stop();
+    Timer timer = Timer(
+      Duration(seconds: 3),
+      () {
+        if (type == 0) {
+          generalNotifier.setCounterNotifier(-1);
+          generalNotifier.setInfoGameNotifier(
+              title: "Math Puzzle!", move: 0, tiles: 0);
+          animateCtrlCounter.reset();
+          globalKey1.currentState!.randomPuzzle();
+          globalKey1.currentState?.initiateGame(false);
+        }
+        _controllerCenter.stop();
+      },
+    );
+  }
+
+  loseFeedback([int type = 1]) {
+    generalNotifier.setInfoGameNotifier(title: "Kalah!");
+    _controllerCenter.play();
+    FlameAudio.bgm.stop();
+    FlameAudio.play('lose.wav');
     Timer timer = Timer(
       Duration(seconds: 3),
       () {

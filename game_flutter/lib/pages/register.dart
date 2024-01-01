@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:game_flutter/controller/auth/firebase_auth.dart';
-import 'package:game_flutter/controller/database/firebase_db.dart';
+import 'package:game_flutter/controller/auth/appwrite_auth.dart';
 import 'package:game_flutter/pages/login.dart';
 import 'package:get/get.dart';
 
 class RegisterScreen extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
-  final DatabaseController databaseController = Get.put(DatabaseController());
 
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -28,6 +27,13 @@ class RegisterScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              controller: usernameController,
+              decoration: InputDecoration(labelText: 'Username'),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
               controller: emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
@@ -40,8 +46,8 @@ class RegisterScreen extends StatelessWidget {
             SizedBox(height: 20),
             InkWell(
               onTap: () {
-                authController.registerUser(
-                    emailController.text, passwordController.text);
+                authController.register(emailController.text,
+                    passwordController.text, usernameController.text);
               },
               child: Container(
                 height: 60,

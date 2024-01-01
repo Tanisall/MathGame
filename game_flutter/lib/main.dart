@@ -44,8 +44,6 @@ class MyApp extends StatelessWidget {
           defaultScale: true, defaultNameLandscape: "MOBILE",
           breakpoints: [
             const ResponsiveBreakpoint.resize(450, name: MOBILE),
-            // const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            // const ResponsiveBreakpoint.autoScale(1000, name: TABLET),
             const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
             const ResponsiveBreakpoint.autoScale(2460, name: "4K"),
           ],
@@ -60,3 +58,29 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     ChangeNotifierProvider(create: (_) => GeneralNotifier());
+
+//     return GetMaterialApp(
+//       title: 'Flutter Demo',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       getPages: AppPages.routes,
+//       initialRoute: '/register',
+//     );
+//     // return MultiProvider(
+//     //   providers: [
+//     //     ChangeNotifierProvider(create: (_) => GeneralNotifier()),
+//     //   ],
+//     //   child:
+//     // );
+//   }
+// }

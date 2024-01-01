@@ -94,7 +94,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
     double? min = Math.min(size.width - 50, size.height - 50);
     double? resizeScale = (min > 800 ? 1 : min / 800 * 1);
-    Axis? axis = size.width >= size.height ? Axis.horizontal : Axis.vertical;
+ 
+   Axis? axis = size.width >= size.height ? Axis.horizontal : Axis.vertical;
     Axis axisChild1 = axis == Axis.horizontal ? Axis.vertical : Axis.horizontal;
 
     return MyScaffold(

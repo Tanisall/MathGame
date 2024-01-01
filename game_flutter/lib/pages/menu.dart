@@ -1,26 +1,25 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_prefixes
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_prefixes, library_private_types_in_public_api
 import 'dart:developer';
 
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:game_flutter/controller/auth/firebase_auth.dart';
-import 'package:game_flutter/controller/database/firebase_db.dart';
+import 'package:game_flutter/controller/auth/appwrite_auth.dart';
+import 'package:game_flutter/controller/database/appwrite_db.dart';
 import 'package:game_flutter/helpers/fontHelper.dart';
 import 'package:game_flutter/pages/gameLayout.dart';
 import 'package:get/get.dart';
 import 'dart:math' as Math;
 
 class MainMenuPage extends StatefulWidget {
-  MainMenuPage({Key? key}) : super(key: key);
+  const MainMenuPage({Key? key}) : super(key: key);
 
   @override
   _MainMenuPageState createState() => _MainMenuPageState();
 }
 
 class _MainMenuPageState extends State<MainMenuPage> {
-  final DatabaseController databaseController = Get.put(DatabaseController());
   final AuthController authController = Get.put(AuthController());
+  final DatabaseController databaseController = Get.put(DatabaseController());
 
   @override
   void dispose() {
@@ -38,7 +37,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    databaseController.readData();
+    databaseController.readDataScore(authController.getUserId());
 
     double min = Math.min(size.width, size.height);
     double resizeScale = (min > 800 ? 1 : min / 800 * 1);
@@ -68,7 +67,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
               Obx(() {
                 if (databaseController.isLoading.isTrue) {
                   return Text(
-                    "",
+                    "fetching data...",
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -134,8 +133,8 @@ class _MainMenuPageState extends State<MainMenuPage> {
             style: ElevatedButton.styleFrom(
                 minimumSize: Size(150, 50), backgroundColor: Colors.white),
             onPressed: () {
-              databaseController.scoreData.clear();
-              databaseController.readData();
+              databaseController.readDataScore(authController.getUserId());
+              log(authController.uid.toString());
             },
             child: Text(
               "Reload",
@@ -155,7 +154,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
               "Logout",
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
-          )
+          ),
+          SizedBox(
+            height: 20,
+          ),
         ],
       )),
     );
