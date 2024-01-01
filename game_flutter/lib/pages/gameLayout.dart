@@ -857,7 +857,6 @@ class _GameLayoutState extends State<GameLayout>
 
   loseFeedback([int type = 1]) {
     generalNotifier.setInfoGameNotifier(title: "Kalah!");
-    _controllerCenter.play();
     FlameAudio.bgm.stop();
     FlameAudio.play('lose.wav');
     Timer timer = Timer(
