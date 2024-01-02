@@ -26,6 +26,12 @@ class RegisterScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(
+              "assets/images/icon_math.png",
+              width: 100,
+              colorBlendMode: BlendMode.color,
+              filterQuality: FilterQuality.high,
+            ),
             TextField(
               controller: usernameController,
               decoration: InputDecoration(labelText: 'Username'),

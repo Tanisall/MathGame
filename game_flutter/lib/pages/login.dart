@@ -28,6 +28,12 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(
+              "assets/images/icon_math.png",
+              width: 150,
+              colorBlendMode: BlendMode.color,
+              filterQuality: FilterQuality.high,
+            ),
             TextField(
               controller: emailController,
               decoration: InputDecoration(labelText: 'Email'),

@@ -52,7 +52,7 @@ class _StartupPageState extends State<StartupPage> {
                         child: Transform.rotate(
                           angle: -20 * Math.pi / 180,
                           child: Image.asset(
-                            "assets/images/icon_wayang.png",
+                            "assets/images/icon_math.png",
                             fit: BoxFit.contain,
                             height: 360 * resizeScale,
                           ),

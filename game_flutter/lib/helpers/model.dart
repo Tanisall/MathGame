@@ -245,7 +245,7 @@ class InfoGame {
   int move;
 
   InfoGame({
-    this.title = "Math Puzzle",
+    this.title = "",
     this.tiles = 0,
     this.move = 0,
   });
