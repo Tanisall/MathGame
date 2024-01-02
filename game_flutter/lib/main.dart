@@ -58,29 +58,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({Key? key}) : super(key: key);
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     ChangeNotifierProvider(create: (_) => GeneralNotifier());
-
-//     return GetMaterialApp(
-//       title: 'Flutter Demo',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       getPages: AppPages.routes,
-//       initialRoute: '/register',
-//     );
-//     // return MultiProvider(
-//     //   providers: [
-//     //     ChangeNotifierProvider(create: (_) => GeneralNotifier()),
-//     //   ],
-//     //   child:
-//     // );
-//   }
-// }
